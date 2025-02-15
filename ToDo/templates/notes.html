@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eisenhower Matrix To-Do List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/notes.css' %}">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Eisenhower Matrix To-Do List</h1>
+        <div class="tabs">
+            <a href="{% url 'dashboard:notes_list' %}" class="tab">To-Do List</a>
+            <a href="{% url 'dashboard:notes' %}" class="tab">Notes</a>
+        </div>
+        <div class="matrix">
+            <div class="quadrant">
+                <h2>Urgent & Important</h2>
+                {% for note in notes %}
+                {% if note.urgent and note.important %}
+                <div class="note">
+                    <div class="note-title">{{ note.title }}</div>
+                    <div class="note-content">{{ note.content }}</div>
+                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="quadrant">
+                <h2>Not Urgent & Important</h2>
+                {% for note in notes %}
+                {% if not note.urgent and note.important %}
+                <div class="note">
+                    <div class="note-title">{{ note.title }}</div>
+                    <div class="note-content">{{ note.content }}</div>
+                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="quadrant">
+                <h2>Urgent & Not Important</h2>
+                {% for note in notes %}
+                {% if note.urgent and not note.important %}
+                <div class="note">
+                    <div class="note-title">{{ note.title }}</div>
+                    <div class="note-content">{{ note.content }}</div>
+                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="quadrant">
+                <h2>Not Urgent & Not Important</h2>
+                {% for note in notes %}
+                {% if not note.urgent and not note.important %}
+                <div class="note">
+                    <div class="note-title">{{ note.title }}</div>
+                    <div class="note-content">{{ note.content }}</div>
+                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <a href="{% url 'dashboard:create_note' %}" class="add-note">Add New Note</a>
+    </div>
+</body>
+</html>
