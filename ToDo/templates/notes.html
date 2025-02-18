@@ -3,69 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eisenhower Matrix To-Do List</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/notes.css' %}">
+    <title>To-Do List</title>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .note {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            transition: 0.3s;
+            background-color: #f8d7da;
+            border-left: 5px solid #721c24;
+        }
+        .note.completed {
+            background-color: #d4edda;
+            border-left-color: #155724;
+        }
+        .note:hover {
+            transform: scale(1.02);
+        }
+        .note-content {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+        }
+        .note-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+        .status-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            font-size: 20px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .status-circle:hover {
+            transform: scale(1.1);
+        }
+        .completed-icon {
+            color: #28a745;
+        }
+        .incomplete-icon {
+            color: #ccc;
+        }
+        .delete-btn {
+            color: #dc3545;
+            transition: 0.3s;
+        }
+        .delete-btn:hover {
+            color: #b02a37;
+        }
+        .add-note {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .add-note:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Eisenhower Matrix To-Do List</h1>
-        <div class="tabs">
-            <a href="{% url 'dashboard:notes_list' %}" class="tab">To-Do List</a>
-            <a href="{% url 'dashboard:notes' %}" class="tab">Notes</a>
+        <h1>To-Do List</h1>
+
+        {% for note in notes %}
+        <div class="note {% if note.status %}completed{% endif %}">
+            <div class="note-content">
+                <a href="{% url 'dashboard:toggle_status' note.id %}" class="status-circle">
+                    {% if note.status %}
+                        <i class="fas fa-check-circle completed-icon"></i>
+                    {% else %}
+                        <i class="far fa-circle incomplete-icon"></i>
+                    {% endif %}
+                </a>
+                <a href="{% url 'dashboard:edit_note' note.id %}" class="note-title">{{ note.title }}</a>
+            </div>
+            <a href="{% url 'dashboard:delete_note' note.id %}" class="status-circle delete-btn">
+                <i class="fas fa-trash"></i>
+            </a>
         </div>
-        <div class="matrix">
-            <div class="quadrant">
-                <h2>Urgent & Important</h2>
-                {% for note in notes %}
-                {% if note.urgent and note.important %}
-                <div class="note">
-                    <div class="note-title">{{ note.title }}</div>
-                    <div class="note-content">{{ note.content }}</div>
-                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <div class="quadrant">
-                <h2>Not Urgent & Important</h2>
-                {% for note in notes %}
-                {% if not note.urgent and note.important %}
-                <div class="note">
-                    <div class="note-title">{{ note.title }}</div>
-                    <div class="note-content">{{ note.content }}</div>
-                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <div class="quadrant">
-                <h2>Urgent & Not Important</h2>
-                {% for note in notes %}
-                {% if note.urgent and not note.important %}
-                <div class="note">
-                    <div class="note-title">{{ note.title }}</div>
-                    <div class="note-content">{{ note.content }}</div>
-                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-            <div class="quadrant">
-                <h2>Not Urgent & Not Important</h2>
-                {% for note in notes %}
-                {% if not note.urgent and not note.important %}
-                <div class="note">
-                    <div class="note-title">{{ note.title }}</div>
-                    <div class="note-content">{{ note.content }}</div>
-                    <div class="note-date">{{ note.created_at|date:"F j, Y, g:i a" }}</div>
-                </div>
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
+        {% empty %}
+        <p style="text-align: center; color: #777;">No notes available.</p>
+        {% endfor %}
+
         <a href="{% url 'dashboard:create_note' %}" class="add-note">Add New Note</a>
     </div>
 </body>

@@ -40,7 +40,3 @@ def delete_note(request, note_id):
     note = get_object_or_404(Note, id=note_id)
     note.delete()
     return redirect('dashboard:notes_list')
-
-def notes(request):
-    notes = Note.objects.all()
-    return render(request, 'notes_tab.html', {'notes': notes})

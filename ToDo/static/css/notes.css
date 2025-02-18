@@ -3,86 +3,93 @@ body {
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 .container {
     width: 90%;
-    max-width: 1200px;
-    margin: 50px auto;
+    max-width: 500px;
+    background: #fff;
     padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 h1 {
     text-align: center;
     color: #333;
-}
-.tabs {
-    display: flex;
-    justify-content: center;
     margin-bottom: 20px;
 }
-.tab {
-    padding: 10px 20px;
-    margin: 0 10px;
-    background-color: #007bff;
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.tab:hover {
-    background-color: #0056b3;
-}
-.matrix {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 20px;
-}
-.quadrant {
-    padding: 20px;
-    background-color: #e9ecef;
-    border-radius: 8px;
-}
-.quadrant h2 {
-    margin-top: 0;
-}
 .note {
-    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
     margin-bottom: 10px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
+    transition: 0.3s;
+    background-color: #f8d7da;
+    border-left: 5px solid #721c24;
 }
-.note-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
+.note.completed {
+    background-color: #d4edda;
+    border-left-color: #155724;
+}
+.note:hover {
+    transform: scale(1.02);
 }
 .note-content {
-    font-size: 14px;
-    color: #666;
-    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1;
 }
-.note-date {
-    font-size: 12px;
-    color: #999;
-    text-align: right;
-    margin-top: 5px;
+.note-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+.status-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.status-circle:hover {
+    transform: scale(1.1);
+}
+.completed-icon {
+    color: #28a745;
+}
+.incomplete-icon {
+    color: #ccc;
+}
+.delete-btn {
+    color: #dc3545;
+    transition: 0.3s;
+}
+.delete-btn:hover {
+    color: #b02a37;
 }
 .add-note {
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 20px;
     background-color: #28a745;
-    color: #fff;
+    color: white;
     text-align: center;
     text-decoration: none;
-    border-radius: 5px;
     font-weight: bold;
+    border-radius: 5px;
+    transition: 0.3s;
 }
 .add-note:hover {
     background-color: #218838;
