@@ -79,12 +79,12 @@
 <body>
     <div class="container">
         <h1>Edit Note</h1>
-        <form action="{% url 'dashboard:edit_note' note.id %}" method="POST" class="form-with-validation">
+        <form action="{% url 'notes:edit_note' note.id %}" method="POST" class="form-with-validation">
             {% csrf_token %}
             {{ form.as_p }}
             <button class="form-submit" type="submit">Update Note</button>
         </form>
-        <a href="{% url 'dashboard:notes_list' %}" class="back-link">Back to Notes List</a>
+        <a href="{% url 'notes:notes_list' %}" class="back-link">Back to Notes List</a>
     </div>
 </body>
 </html>

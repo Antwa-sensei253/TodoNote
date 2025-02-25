@@ -3,133 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-Do List</title>
-
+    <title>Notes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #fff;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 90%;
-            max-width: 500px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
+            height: 100vh;
             color: #333;
-            margin-bottom: 20px;
-        }
-        .note {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            transition: 0.3s;
-            background-color: #f8d7da;
-            border-left: 5px solid #721c24;
         }
-        .note.completed {
-            background-color: #d4edda;
-            border-left-color: #155724;
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #fff;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
-        .note:hover {
-            transform: scale(1.02);
-        }
-        .note-content {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-grow: 1;
-        }
-        .note-title {
-            font-size: 16px;
-            font-weight: bold;
+        .sidenav a {
+            padding: 12px 20px;
+            text-decoration: none;
+            font-size: 18px;
             color: #333;
-            text-decoration: none;
-        }
-        .status-circle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            font-size: 20px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        .status-circle:hover {
-            transform: scale(1.1);
-        }
-        .completed-icon {
-            color: #28a745;
-        }
-        .incomplete-icon {
-            color: #ccc;
-        }
-        .delete-btn {
-            color: #dc3545;
-            transition: 0.3s;
-        }
-        .delete-btn:hover {
-            color: #b02a37;
-        }
-        .add-note {
             display: block;
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            background-color: #28a745;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 5px;
             transition: 0.3s;
+            border-bottom: 1px solid #eee;
         }
-        .add-note:hover {
-            background-color: #218838;
+        .sidenav a:hover {
+            background-color: #f1f1f1;
+        }
+        .sidenav .closebtn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #333;
+        }
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 2;
+            background: none;
+            border: none;
+            color: #4285f4;
+        }
+        .menu-icon:hover {
+            color: #0d47a1;
+        }
+        .create-btn {
+            position: fixed;
+            top: 10px;
+            left: 60px;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 8px 15px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .create-btn:hover {
+            background: #0d47a1;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 40px;
+            transition: margin-left 0.5s;
+            width: 100%;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>To-Do List</h1>
 
+    <button class="menu-icon" ondblclick="closeNav()" onclick="openNav()">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <a class="create-btn" href="{% url 'notes:create_note' %}">Create</a>
+
+    <div id="mySidenav" class="sidenav">
         {% for note in notes %}
-        <div class="note {% if note.status %}completed{% endif %}">
-            <div class="note-content">
-                <a href="{% url 'dashboard:toggle_status' note.id %}" class="status-circle">
-                    {% if note.status %}
-                        <i class="fas fa-check-circle completed-icon"></i>
-                    {% else %}
-                        <i class="far fa-circle incomplete-icon"></i>
-                    {% endif %}
-                </a>
-                <a href="{% url 'dashboard:edit_note' note.id %}" class="note-title">{{ note.title }}</a>
-            </div>
-            <a href="{% url 'dashboard:delete_note' note.id %}" class="status-circle delete-btn">
-                <i class="fas fa-trash"></i>
-            </a>
-        </div>
+        <a href="{% url 'notes:edit_note' note.id %}">{{ note.title }}</a>
         {% empty %}
-        <p style="text-align: center; color: #777;">No notes available.</p>
+        <p style="padding: 12px; color: #666;">No notes available.</p>
         {% endfor %}
-
-        <a href="{% url 'dashboard:create_note' %}" class="add-note">Add New Note</a>
     </div>
+
+    <div class="content" id="main-content">
+        {% if notes %}
+            <h1>{{ notes.0.title }}</h1>
+            <div class="note-content">{{ notes.0.content|safe }}</div>
+        {% else %}
+            <h1>No Notes</h1>
+            <p>Select or create a note to view details.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("main-content").style.marginLeft = "250px";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("main-content").style.marginLeft = "0";
+        }
+    </script>
+
 </body>
 </html>
